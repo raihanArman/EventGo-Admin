@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="gambar"
+            type="String" />
+    </data>
+    <LinearLayout
+        android:padding="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp">
+            <ImageView
+                app:imageUrl="@{gambar}"
+                android:id="@+id/iv_kategori"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"/>
+            <LinearLayout
+                android:id="@+id/layout_btn_add_image_2"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@drawable/bg_input"
+                android:orientation="vertical"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_camera_alt_black_24dp"
+                    android:tint="#848484"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tambahkan Gambar"
+                    android:fontFamily="@font/nunito"/>
+            </LinearLayout>
+            <TextView
+                android:visibility="invisible"
+                android:id="@+id/tv_ganti_kategori"
+                android:background="@drawable/bg_button_tambah_keranjang"
+                android:text="Ganti gambar"
+                android:padding="10dp"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/layout_btn_add_image_2"
+                android:layout_margin="16dp"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_marginTop="24dp"
+            android:includeFontPadding="false"
+            android:layout_marginBottom="10dp"
+            android:text="Nama Kategori"
+            android:textSize="15sp"
+            android:textColor="@android:color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/et_kategori"
+            android:padding="15dp"
+            android:hint="Kategori"
+            android:textSize="12sp"
+            android:textColor="@android:color/black"
+            android:ems="10"
+            android:maxLines="1"
+            android:background="@drawable/bg_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</layout>
