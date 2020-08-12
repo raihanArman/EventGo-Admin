@@ -5,11 +5,12 @@ import com.example.eventgoadmin.request.model.Event;
 import com.example.eventgoadmin.request.model.EventResponse;
 import com.example.eventgoadmin.request.model.Home;
 import com.example.eventgoadmin.request.model.Lampiran;
-import com.example.eventgoadmin.request.model.Pesan;
 import com.example.eventgoadmin.request.model.Value;
-import com.example.eventgoadmin.request.response.KategoriResponse;
-import com.example.eventgoadmin.request.response.LoginResponse;
-import com.example.eventgoadmin.request.response.UserResponse;
+import com.example.eventgoadmin.request.model.push_notif.DataMessage;
+import com.example.eventgoadmin.request.model.push_notif.FCMResponse;
+import com.example.eventgoadmin.request.model.response.KategoriResponse;
+import com.example.eventgoadmin.request.model.response.LoginResponse;
+import com.example.eventgoadmin.request.model.response.UserResponse;
 
 import java.util.List;
 
@@ -18,9 +19,9 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
-import retrofit2.http.Url;
 
 public interface ApiRequest {
 
@@ -144,5 +145,13 @@ public interface ApiRequest {
     Call<KategoriResponse> kategoriRequest(
             @Query("id_kategori") String idKategori
     );
+
+    //    Push Notif
+    @Headers({
+            "Content-Type:application/json",
+            "Authorization:key=AAAAG8R6Kz4:APA91bGIZvF0CqetyOEasapb7_1aWlIcJQBcBBp4AbW8mxUu7kFLjSMauZ1WzAHKtXI4nHnjjCtLhWXfbHwD4-NRVPqng6L7kHFuEEcQydxkYHsspytGdfWElFhYt7vkCqruvoZamkQ6"
+    })
+    @POST("fcm/send")
+    Call<FCMResponse> sendMessage(@Body DataMessage body);
 
 }

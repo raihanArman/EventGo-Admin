@@ -1,5 +1,6 @@
 package com.example.eventgoadmin.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -11,6 +12,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,15 +20,27 @@ import android.widget.Toast;
 import com.example.eventgoadmin.R;
 import com.example.eventgoadmin.databinding.ActivityDetailEventBinding;
 import com.example.eventgoadmin.request.ApiRequest;
+import com.example.eventgoadmin.request.FCMRequest;
 import com.example.eventgoadmin.request.RetrofitRequest;
 import com.example.eventgoadmin.request.model.Event;
 import com.example.eventgoadmin.request.model.EventResponse;
 import com.example.eventgoadmin.request.model.Lampiran;
+import com.example.eventgoadmin.request.model.Token;
 import com.example.eventgoadmin.request.model.Value;
+import com.example.eventgoadmin.request.model.push_notif.DataMessage;
+import com.example.eventgoadmin.request.model.push_notif.FCMResponse;
 import com.example.eventgoadmin.ui.adapter.LampiranAdapter;
 import com.example.eventgoadmin.util.Utils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,10 +48,12 @@ import retrofit2.Response;
 
 public class DetailEventActivity extends AppCompatActivity {
 
+    private static final String TAG = "DetailEventActivity";
+
     ActivityDetailEventBinding binding;
     String idEvent, idUser, idRiwayat;
     int typeIntent;
-    ApiRequest apiRequest;
+    ApiRequest apiRequest, fcmRequest;
     LampiranAdapter lampiranAdapter;
     Event event;
 
@@ -51,6 +67,7 @@ public class DetailEventActivity extends AppCompatActivity {
         typeIntent = getIntent().getIntExtra("type_intent", 0);
         event = getIntent().getParcelableExtra("event");
         apiRequest = RetrofitRequest.getInstance().create(ApiRequest.class);
+        fcmRequest = FCMRequest.getClient(Utils.fcmUrl).create(ApiRequest.class);
 
         loadDataEvent();
 
@@ -170,17 +187,7 @@ public class DetailEventActivity extends AppCompatActivity {
                         public void onResponse(Call<Value> call, Response<Value> response) {
                             progressDialog.dismiss();
                             if (response.body().getValue() == 1) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(DetailEventActivity.this);
-                                builder.setTitle("Pesan");
-                                builder.setMessage("Anda telah mengupdate event");
-                                builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        finish();
-                                    }
-                                });
-                                builder.show();
+                                sendMessagingToUser(status);
                             }
                         }
 
@@ -197,6 +204,55 @@ public class DetailEventActivity extends AppCompatActivity {
             public void onFailure(Call<Value> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(DetailEventActivity.this, "Error event : "+t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendMessagingToUser(String message){
+        String tokenAdmin = FirebaseInstanceId.getInstance().getToken();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference(Utils.TOKEN_TBL);
+        db.child(event.getIdUser()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Token token = dataSnapshot.getValue(Token.class);
+                Map<String, String> content = new HashMap<>();
+                content.put("title", "usulan");
+                content.put("id_event", idEvent);
+                content.put("id_user", idUser);
+                content.put("token_admin", tokenAdmin);
+                content.put("message", message);
+                DataMessage dataMessage = new DataMessage(token.getToken(), content);
+                fcmRequest.sendMessage(dataMessage)
+                        .enqueue(new Callback<FCMResponse>() {
+                            @Override
+                            public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                                if (response.body().getSuccess() == 1) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(DetailEventActivity.this);
+                                    builder.setTitle("Pesan");
+                                    builder.setMessage("Anda telah mengupdate event");
+                                    builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            finish();
+                                        }
+                                    });
+                                    builder.show();
+                                }else{
+                                    Toast.makeText(DetailEventActivity.this, "Gagal mengirirm", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<FCMResponse> call, Throwable t) {
+                                Log.d(TAG, "onFailure: ");
+                            }
+                        });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }

@@ -1,6 +1,8 @@
 package com.example.eventgoadmin.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,11 +22,16 @@ import com.example.eventgoadmin.request.ApiRequest;
 import com.example.eventgoadmin.request.RetrofitRequest;
 import com.example.eventgoadmin.request.model.EventResponse;
 import com.example.eventgoadmin.request.model.Home;
-import com.example.eventgoadmin.request.response.KategoriResponse;
+import com.example.eventgoadmin.request.model.Token;
+import com.example.eventgoadmin.request.model.response.KategoriResponse;
 import com.example.eventgoadmin.ui.EventAllActivity;
 import com.example.eventgoadmin.ui.KategoriMoreActivity;
 import com.example.eventgoadmin.ui.adapter.EventAdapter;
 import com.example.eventgoadmin.ui.adapter.KategoriAdapter;
+import com.example.eventgoadmin.util.Utils;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +43,8 @@ public class HomeFragment extends Fragment {
     ApiRequest apiRequest;
     EventAdapter eventAdapter;
     KategoriAdapter kategoriAdapter;
+    SharedPreferences sharedPreferences;
+    String idUser;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -54,6 +63,8 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         apiRequest = RetrofitRequest.getInstance().create(ApiRequest.class);
+        sharedPreferences = getActivity().getSharedPreferences(Utils.LOGIN_KEY, Context.MODE_PRIVATE);
+        idUser = sharedPreferences.getString(Utils.ID_USER_KEY, "");
 
         eventAdapter = new EventAdapter(getActivity());
         kategoriAdapter = new KategoriAdapter(getActivity());
@@ -71,6 +82,12 @@ public class HomeFragment extends Fragment {
         loadHome();
         loadRiwayat();
         loadDataKategori();
+
+
+        FirebaseDatabase db =FirebaseDatabase.getInstance();
+        DatabaseReference tokens = db.getReference(Utils.TOKEN_TBL);
+        Token token = new Token(FirebaseInstanceId.getInstance().getToken());
+        tokens.child(idUser).setValue(token);
 
         binding.tvKategoriMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,4 +159,5 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
 }

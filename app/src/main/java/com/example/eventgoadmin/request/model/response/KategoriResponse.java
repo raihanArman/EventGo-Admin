@@ -1,4 +1,4 @@
-package com.example.eventgoadmin.request.response;
+package com.example.eventgoadmin.request.model.response;
 
 import com.example.eventgoadmin.request.model.Kategori;
 import com.google.gson.annotations.Expose;

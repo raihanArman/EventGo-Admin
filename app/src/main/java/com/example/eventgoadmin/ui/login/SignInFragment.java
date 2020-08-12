@@ -24,7 +24,7 @@ import com.example.eventgoadmin.R;
 import com.example.eventgoadmin.databinding.FragmentSignInBinding;
 import com.example.eventgoadmin.request.ApiRequest;
 import com.example.eventgoadmin.request.RetrofitRequest;
-import com.example.eventgoadmin.request.response.LoginResponse;
+import com.example.eventgoadmin.request.model.response.LoginResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;

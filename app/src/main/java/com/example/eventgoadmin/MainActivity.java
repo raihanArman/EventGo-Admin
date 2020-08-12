@@ -5,6 +5,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -77,5 +78,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            final boolean fromNotification = extras.getBoolean(Utils.NOTIFICATION);
+            if (fromNotification) {
+                setFragment(new InboxFragment());
+                binding.spaceNav.setActiveSpaceItemColor(1);
+            }
+        }
+    }
 }

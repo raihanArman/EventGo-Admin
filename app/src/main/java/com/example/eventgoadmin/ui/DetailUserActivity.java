@@ -13,20 +13,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.eventgoadmin.R;
-import com.example.eventgoadmin.databinding.ActivityDetailEventBinding;
 import com.example.eventgoadmin.databinding.ActivityDetailUserBinding;
 import com.example.eventgoadmin.request.ApiRequest;
 import com.example.eventgoadmin.request.RetrofitRequest;
 import com.example.eventgoadmin.request.model.EventResponse;
 import com.example.eventgoadmin.request.model.User;
 import com.example.eventgoadmin.request.model.Value;
-import com.example.eventgoadmin.request.response.UserResponse;
+import com.example.eventgoadmin.request.model.response.UserResponse;
 import com.example.eventgoadmin.ui.adapter.EventTerbaruAdapter;
-import com.example.eventgoadmin.ui.adapter.LampiranAdapter;
 import com.example.eventgoadmin.util.Utils;
 
 import retrofit2.Call;

@@ -1,4 +1,4 @@
-package com.example.eventgoadmin.request.response;
+package com.example.eventgoadmin.request.model.response;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 

@@ -44,7 +44,7 @@ import com.example.eventgoadmin.request.model.Event;
 import com.example.eventgoadmin.request.model.EventResponse;
 import com.example.eventgoadmin.request.model.Kategori;
 import com.example.eventgoadmin.request.model.Value;
-import com.example.eventgoadmin.request.response.KategoriResponse;
+import com.example.eventgoadmin.request.model.response.KategoriResponse;
 import com.example.eventgoadmin.util.ConvertBitmap;
 import com.example.eventgoadmin.util.Utils;
 import com.firebase.geofire.GeoFire;
@@ -62,7 +62,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;

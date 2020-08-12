@@ -14,13 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.eventgoadmin.R;
-import com.example.eventgoadmin.databinding.FragmentInboxBinding;
 import com.example.eventgoadmin.databinding.FragmentUserBinding;
 import com.example.eventgoadmin.request.ApiRequest;
 import com.example.eventgoadmin.request.RetrofitRequest;
-import com.example.eventgoadmin.request.model.EventResponse;
-import com.example.eventgoadmin.request.response.UserResponse;
-import com.example.eventgoadmin.ui.adapter.InboxAdapter;
+import com.example.eventgoadmin.request.model.response.UserResponse;
 import com.example.eventgoadmin.ui.adapter.UserAdapter;
 
 import retrofit2.Call;
